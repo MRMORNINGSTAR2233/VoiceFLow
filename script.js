@@ -1,18 +1,26 @@
-// script.js
 $(document).ready(function () {
-    $('#submitBtn').on('click', function () {
-        const formData = $('#applicationForm').serialize(); // Serialize form data
-        $.ajax({
-            type: 'POST',
-            url: 'process.php',
-            data: formData,
-            success: function (response) {
-                $('#result').html(response).show(); // Show formatted response
-                $('#applicationForm')[0].reset(); // Reset form after submission
-            },
-            error: function () {
-                alert('There was an error processing your form. Please try again.');
-            }
+    $('#applicationForm').submit(function (e) {
+        e.preventDefault();
+
+        const name = $('#name').val();
+        const email = $('#email').val();
+        const phone = $('#phone').val();
+        const address = $('#address').val();
+
+        // Display the submitted information
+        $('#displayName').text(name);
+        $('#displayEmail').text(email);
+        $('#displayPhone').text(phone);
+        $('#displayAddress').text(address);
+
+        $('#result').removeClass('hidden');
+
+        // Send data to the PHP backend
+        $.post('register.php', {
+            name: name,
+            email: email,
+            phone: phone,
+            address: address
         });
     });
 });

@@ -1,19 +1,31 @@
 <?php
-// process.php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = htmlspecialchars($_POST['name']);
-    $email = htmlspecialchars($_POST['email']);
-    $phone = htmlspecialchars($_POST['phone']);
-    $dob = htmlspecialchars($_POST['dob']);
-    $address = htmlspecialchars($_POST['address']);
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "registration";
 
-    echo "<h2>Form Submitted Successfully!</h2>";
-    echo "<p><strong>Name:</strong> $name</p>";
-    echo "<p><strong>Email:</strong> $email</p>";
-    echo "<p><strong>Phone:</strong> $phone</p>";
-    echo "<p><strong>Date of Birth:</strong> $dob</p>";
-    echo "<p><strong>Address:</strong> $address</p>";
-} else {
-    echo "Invalid request.";
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+
+    $sql = "INSERT INTO applications (name, email, phone, address) VALUES ('$name', '$email', '$phone', '$address')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close();
 }
 ?>
